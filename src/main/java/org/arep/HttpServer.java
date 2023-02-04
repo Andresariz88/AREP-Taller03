@@ -6,13 +6,20 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.*;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Java server which exposes the movie search services
  */
 public class HttpServer {
+    private static HttpServer _instance = new HttpServer();
+    private Map<String, RESTService> services = new HashMap<>();
 
+    private HttpServer (){}
+    public static HttpServer getInstance() {
+        return _instance;
+    }
     private static final String USER_AGENT = "Mozilla/5.0";
     private static final String GET_URL = "https://omdbapi.com/?t=%S&apikey=1d53bda9";
     public static final ConcurrentHashMap<String, String> cache = new ConcurrentHashMap<>();
@@ -21,7 +28,7 @@ public class HttpServer {
      * Method that starts the server and handle the requests according to what is required
      * @throws IOException
      */
-    public static void main(String[] args) throws IOException {
+    public void run(String[] args) throws IOException {
         ServerSocket serverSocket = null;
         try {
             serverSocket = new ServerSocket(35000);
@@ -63,7 +70,7 @@ public class HttpServer {
             }
             String requestedMovie = null;
             //System.out.println("FILE, METHOD: " + request + " " + method);
-            if (request.startsWith("/form?") && method.equals("POST")) {
+            /*if (request.startsWith("/form?") && method.equals("POST")) {
                 requestedMovie = request.replace("/form?s=", "");
                 outputLine = "HTTP/1.1 200 OK\r\n" +
                         "Content-type: application/json\r\n"+
@@ -71,6 +78,18 @@ public class HttpServer {
                         + getMovie(requestedMovie.toLowerCase());
             } else {
                 outputLine = htmlGetForm();
+            }*/
+            if (request.startsWith("/apps/")) {
+                outputLine = executeService(request.substring(5));
+                //outputLine = jsonSimple();
+            } else if (request.startsWith("/form?") && method.equals("POST")) {
+                requestedMovie = request.replace("/form?s=", "");
+                outputLine = "HTTP/1.1 200 OK\r\n" +
+                        "Content-type: application/json\r\n"+
+                        "\r\n"
+                        + getMovie(requestedMovie.toLowerCase());
+            } else {
+                outputLine = executeService("/form");
             }
             out.println(outputLine);
             out.close();
@@ -86,7 +105,7 @@ public class HttpServer {
      * @return String corresponding to the movie information in JSON format
      * @throws IOException
      */
-    public static String getMovie(String movie) throws IOException {
+    public String getMovie(String movie) throws IOException {
         String reqMovie = "";
         if (cache.containsKey(movie)) {
             reqMovie = cache.get(movie);
@@ -123,11 +142,22 @@ public class HttpServer {
         return reqMovie;
     }
 
+    private String executeService(String serviceName) {
+        RESTService rs = services.get(serviceName);
+        String header = rs.getHeader();
+        String body = rs.getResponse();
+        return header + body;
+    }
+
+    public void addService(String key, RESTService service) {
+        services.put(key, service);
+    }
+
     /**
      * Method that returns the form page to the user in the web navigator
      * @return String corresponding to the web page in HTML format
      */
-    public static String htmlGetForm() {
+    public String htmlGetForm() {
         return "HTTP/1.1 200 OK\r\n" +
                 "Content-type: text/html\r\n" +
                 "\r\n" +
