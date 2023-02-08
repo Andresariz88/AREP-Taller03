@@ -1,7 +1,6 @@
-package org.webapps;
+package org.arep.webapps;
 
-import org.arep.HttpServer;
-import org.arep.RESTService;
+import org.arep.server.HttpServer;
 
 import java.io.IOException;
 

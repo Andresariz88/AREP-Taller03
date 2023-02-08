@@ -1,4 +1,4 @@
-package org.arep;
+package org.arep.server;
 
 import java.io.*;
 import java.net.*;

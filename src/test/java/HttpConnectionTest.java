@@ -1,4 +1,4 @@
-import org.arep.HttpServer;
+import org.arep.server.HttpServer;
 import org.junit.*;
 
 import java.io.IOException;

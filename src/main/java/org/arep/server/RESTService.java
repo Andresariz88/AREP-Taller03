@@ -1,4 +1,4 @@
-package org.arep;
+package org.arep.server;
 
 public interface RESTService {
     public String getHeader();
