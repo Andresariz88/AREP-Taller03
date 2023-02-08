@@ -9,6 +9,7 @@ public class WebApp {
         HttpServer server = HttpServer.getInstance();
         server.addService("/form", new FormHTMLService());
         server.addService("/style", new FormCSSService());
+        server.addService("/script", new FormJSService());
         server.run(args);
     }
 }
