@@ -41,7 +41,8 @@ Para usarlo simplemente ingresa la siguiente URL en la barra de búsqueda de tu 
 
 Y listo, la aplicación estará lista para que la uses.
 
-![](./img/img.png)
+![](./img/img0.png)
+![](./img/img1.png)
 
 ## Running the tests
 
@@ -52,7 +53,9 @@ mvn test
 También, la clase **JavaClient** establece una conexión con el servidor sin necesidad de usar un navegador web. Puedes probar el servicio enviando múltiples instrucciones por medio de la consola y ver cómo el servidor las maneja. El archivo [post-request.txt](./post_requests.txt) contiene varias líneas de peticiones que puedes copiar y pegar.
 
 ## Diseño
-El proyecto cuenta con una clase llamada **HttpServer** la cual hace de fachada de servidor web y expone el servicio para ser consumido por un cliente. A su vez, esta clase cuenta con los mecanismos necesarios para manejar las diferentes solicitudes hechas por los clientes y un caché tolerante a concurrencia en el cual se guardarán todas las peticiones hechas al API externo, para que la próxima vez que se solociten el tiempo y consumo de recursos sea mínimo.
+El proyecto cuenta con una clase llamada **HttpServer** la cual hace de fachada de servidor web y expone el servicio para ser consumido por un cliente. A su vez, esta clase cuenta con los mecanismos necesarios para manejar las diferentes solicitudes hechas por los clientes y un caché tolerante a concurrencia en el cual se guardarán todas las peticiones hechas al API externo, para que la próxima vez que se soliciten el tiempo y consumo de recursos sea mínimo.
+
+Adicionalmente, se agregaron servicios **REST** que manejan las diferentes solicitudes para los recursos HTML, CSS, JavaScript y img de la página. Haciendo así que el servidor sea mucho más poderoso y permitiendo agregar nuevos servicios simplemente digitándolos en el main de la clase **WebApp**.
 
 ## Built With
 
