@@ -88,8 +88,11 @@ public class HttpServer {
                         "Content-type: application/json\r\n"+
                         "\r\n"
                         + getMovie(requestedMovie.toLowerCase());
-            } else {
+            } else if (request.equalsIgnoreCase("/")) {
                 outputLine = executeService("/form");
+            }
+            else {
+                outputLine = executeService("/404");
             }
             out.println(outputLine);
             out.close();

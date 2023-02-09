@@ -93,3 +93,34 @@ img {
 ::-webkit-scrollbar {
     display: none;
 }
+
+.not-found {
+    text-align: center;
+    background-color: #f5f6fa;
+    margin-top: 10%;
+    margin-bottom: 0;
+    font-size: 25px;
+}
+
+.not-found h2 {
+    margin-top: 0;
+    margin-bottom: 5px;
+}
+
+.nf-btn {
+    color: white;
+    background-color: #7f8ff4;
+    transition: all 200ms ease;
+    cursor: pointer;
+    margin: 2px 2px;
+    padding: 8px;
+    font-size: 18px;
+    border-radius: 3px;
+    border: 1px solid rgba(0, 0, 0, 0);
+    box-shadow: 0 6px 10px 0 rgba(0, 0, 0 , .15);
+    transition: all 200ms ease;
+}
+
+.nf-btn:hover {
+    background-color: #6c7ff2;
+}

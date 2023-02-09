@@ -11,6 +11,7 @@ public class WebApp {
         server.addService("/style", new FormCSSService());
         server.addService("/script", new FormJSService());
         server.addService("/image", new FormImgService());
+        server.addService("/404", new Error404Service());
         server.run(args);
     }
 }
