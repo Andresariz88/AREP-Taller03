@@ -10,6 +10,7 @@ public class WebApp {
         server.addService("/form", new FormHTMLService());
         server.addService("/style", new FormCSSService());
         server.addService("/script", new FormJSService());
+        server.addService("/image", new FormImgService());
         server.run(args);
     }
 }

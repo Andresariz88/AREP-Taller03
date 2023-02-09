@@ -21,5 +21,15 @@ function loadPostMsg(name){
             div.innerHTML = "";
             console.log(data);
             displayJson(data, div);
-        } /*document.getElementById("postrespmsg").innerHTML = data*/);
-  }
+    } /*document.getElementById("postrespmsg").innerHTML = data*/);
+}
+
+// Get image
+const xhttp = new XMLHttpRequest();
+xhttp.onload = function() {
+    base64EncodedImage = this.responseText;
+    document.getElementById("image").setAttribute("src", `data:image/jpeg;base64,` + base64EncodedImage);
+    
+}
+xhttp.open("GET", "/apps/image");
+xhttp.send();
