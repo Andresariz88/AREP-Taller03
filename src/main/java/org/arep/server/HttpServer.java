@@ -25,6 +25,10 @@ public class HttpServer {
     public static final ConcurrentHashMap<String, String> cache = new ConcurrentHashMap<>();
 
     private Map<String, HttpResponse> gets = new HashMap<>();
+    private Map<String, HttpResponse> posts = new HashMap<>();
+
+    public final StaticFiles staticFiles = new StaticFiles();
+
 
     /**
      * Method that starts the server and handle the requests according to what is required
@@ -78,6 +82,8 @@ public class HttpServer {
                         outputLine = executeService(request.substring(5));
                     } else if (request.equalsIgnoreCase("/")) {
                         outputLine = executeService("/form");
+                    } else if (staticFiles.checkFile(request)) {
+                        outputLine = staticFiles.getFile(request);
                     } else {
                         outputLine = gets.get(request).getResponse();
                     }
@@ -86,14 +92,19 @@ public class HttpServer {
                     outputLine = executeService("/404");
                 }
             } else /*if (method.equalsIgnoreCase("POST"))*/ {
-                if (request.startsWith("/form?")) {
-                    requestedMovie = request.replace("/form?s=", "");
-                    outputLine = "HTTP/1.1 200 OK\r\n" +
-                            "Content-type: application/json\r\n"+
-                            "\r\n"
-                            + getMovie(requestedMovie.toLowerCase());
-                } else {
-                    outputLine = executeService("/404");
+                try {
+                    if (request.startsWith("/form?")) {
+                        requestedMovie = request.replace("/form?s=", "");
+                        outputLine = "HTTP/1.1 200 OK\r\n" +
+                                "Content-type: application/json\r\n" +
+                                "\r\n"
+                                + getMovie(requestedMovie.toLowerCase());
+                    } else {
+                        System.out.println("DEVOLVIENDO: " + posts.get(request).getResponse());
+                        outputLine = posts.get(request).getResponse();
+                    }
+                } catch (NullPointerException e) {
+                    outputLine = "";
                 }
             }
 
@@ -157,6 +168,11 @@ public class HttpServer {
         services.put(key, service);
     }
 
+    /**
+     * Hace que un recurso sea accesible por medio del método get
+     * @param path ruta del recurso
+     * @param route recurso en cuestión
+     */
     public void get(String path, Route route) {
         HttpResponse httpResponse = new HttpResponse();
         String responseBody = route.handle(path, httpResponse);
@@ -164,4 +180,11 @@ public class HttpServer {
         gets.put(path, httpResponse);
     }
 
+    public void post(String path, Route route) {
+        HttpResponse httpResponse = new HttpResponse();
+        String responseBody = route.handle(path, httpResponse);
+        httpResponse.body(responseBody);
+        System.out.println(httpResponse.getResponse());
+        posts.put(path, httpResponse);
+    }
 }
