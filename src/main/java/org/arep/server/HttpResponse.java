@@ -16,11 +16,13 @@ public class HttpResponse {
         type = "Content-type: text/html";
     }
 
+    public HttpResponse(String body) {
+        status = "HTTP/1.1 200 OK";
+        type = "Content-type: text/html";
+        this.body = body;
+    }
+
     public String getResponse() {
-        /*if (type.split("/")[1].equals("html")) {
-            return "a";
-        }
-        return "e";*/
         return status + "\r\n" + type + "\r\n" + "\r\n" + body;
     }
 
