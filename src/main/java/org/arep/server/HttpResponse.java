@@ -1,5 +1,7 @@
 package org.arep.server;
 
+import java.util.Base64;
+
 /**
  * Class corresponding to the Http Server Responses.
  * By default, it is a Text/HTML response.
@@ -20,6 +22,20 @@ public class HttpResponse {
         status = "HTTP/1.1 200 OK";
         type = "Content-type: text/html";
         this.body = body;
+    }
+
+    public void setSpecificType(String file) {
+        String extension = file.split("\\.")[1];
+        if (extension.equalsIgnoreCase("html")) {
+            type = "Content-type: text/html";
+        } else if (extension.equalsIgnoreCase("css")) {
+            type = "Content-type: text/css";
+        } else if (extension.equalsIgnoreCase("js")) {
+            type = "Content-type: application/javascript";
+        } else if (extension.equalsIgnoreCase("png")) {
+            type = "Content-type: image/png";
+            body = Base64.getEncoder().encodeToString(HttpServer.getInstance().staticFiles.getImg(file));
+        }
     }
 
     public String getResponse() {

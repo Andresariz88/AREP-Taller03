@@ -33,7 +33,18 @@ public class StaticFiles {
         }
         String body = new String(fileContent);
         HttpResponse httpResponse = new HttpResponse(body);
+        httpResponse.setSpecificType(file);
         return httpResponse.getResponse();
+    }
+
+    public byte[] getImg(String file) {
+        byte[] fileContent;
+        try {
+            fileContent = Files.readAllBytes(Paths.get(location + file));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return fileContent;
     }
 
     public String location() {

@@ -77,19 +77,20 @@ public class HttpServer {
 
             String requestedMovie;
             if (method.equalsIgnoreCase("GET")) {
-                try {
+                try {/*
                     if (request.startsWith("/apps/")) {
                         outputLine = executeService(request.substring(5));
-                    } else if (request.equalsIgnoreCase("/")) {
-                        outputLine = executeService("/form");
+                    } else*/ if (request.equalsIgnoreCase("/")) {
+                    outputLine = staticFiles.getFile("/apps/form.html");
                     } else if (staticFiles.checkFile(request)) {
+                        System.out.println("ESTÁ EN STATIC");
                         outputLine = staticFiles.getFile(request);
                     } else {
-                        outputLine = gets.get(request).getResponse();
+                        outputLine = staticFiles.getFile("/404.html");
                     }
                 }
                 catch (NullPointerException e) {
-                    outputLine = executeService("/404");
+                    outputLine = staticFiles.getFile("/404.html");
                 }
             } else /*if (method.equalsIgnoreCase("POST"))*/ {
                 try {
@@ -157,12 +158,12 @@ public class HttpServer {
         return reqMovie;
     }
 
-    private String executeService(String serviceName) {
+    /*private String executeService(String serviceName) {
         RESTService rs = services.get(serviceName);
         String header = rs.getHeader();
         String body = rs.getResponse();
         return header + body;
-    }
+    }*/
 
     public void addService(String key, RESTService service) {
         services.put(key, service);
@@ -184,7 +185,6 @@ public class HttpServer {
         HttpResponse httpResponse = new HttpResponse();
         String responseBody = route.handle(path, httpResponse);
         httpResponse.body(responseBody);
-        System.out.println(httpResponse.getResponse());
         posts.put(path, httpResponse);
     }
 }
