@@ -1,6 +1,8 @@
-# Aplicaciones Distribuidas (HTTP, SOCKETS, HTML, JS,MAVEN, GIT)
+# Microframeworks WEB
 
-Esta es una aplicación web que permite consultar la información de películas y series ingresadas por el usuario. Consta de un input text y un botón el cual hace la solicitud al servidor, de la película o serie ingresada, y este devuelve la información en formato JSON. El servidor consta de un caché tolerante a concurrencia y un servicio de conexión al API externo de [OMDb](https://omdbapi.com/) de donde obtendrá la información requerida.
+Servidor web que soporta una funcionalidad similar a la de Spark. La aplicación permite el registro de servicios get y post usando funciones lambda, configurar el directorio de los archivos estáticos, y cambiar el tipo de la respuesta del encabezado Http. Construido únicamente con el API básico de Java. No utiliza frameworks como Spark o Spring.
+
+Adicionalmente, contiene una aplicación web que permite consultar la información de películas y series ingresadas por el usuario. Consta de un input text y un botón el cual hace la solicitud al servidor, de la película o serie ingresada, y este devuelve la información en formato JSON. El servidor consta de un caché tolerante a concurrencia y un servicio de conexión al API externo de [OMDb](https://omdbapi.com/) de donde obtendrá la información requerida.
 
 ## Getting Started
 
@@ -55,7 +57,15 @@ También, la clase **JavaClient** establece una conexión con el servidor sin ne
 ## Diseño
 El proyecto cuenta con una clase llamada **HttpServer** la cual hace de fachada de servidor web y expone el servicio para ser consumido por un cliente. A su vez, esta clase cuenta con los mecanismos necesarios para manejar las diferentes solicitudes hechas por los clientes y un caché tolerante a concurrencia en el cual se guardarán todas las peticiones hechas al API externo, para que la próxima vez que se soliciten el tiempo y consumo de recursos sea mínimo.
 
-Adicionalmente, se agregaron servicios **REST** que manejan las diferentes solicitudes para los recursos HTML, CSS, JavaScript y img de la página. Haciendo así que el servidor sea mucho más poderoso y permitiendo agregar nuevos servicios simplemente digitándolos en el main de la clase **WebApp**.
+### Microframeworks WEB
+
+Anteriormente, se tenían una interfaz de servicios **REST** y múltiples clases que manejaban las diferentes solicitudes para los recursos HTML, CSS, JavaScript e img de la página.
+
+Estos servicios se suprimieron y ahora simplemente se tiene una clase (**StaticFiles**) que maneja las solicitudes y busca los archivos estáticos en el disco del servidor, y otra (**HttpResponse**) que configura el encabezado y el cuerpo del paquete Http que se va a enviar.
+
+Adicionalmente, se agregó la posibilidad de configurar servicios web de tipo GET y POST manualmente por medio de funciones lambda.
+
+## Prueba de desarrollo de aplicaciones en el servidor
 
 ## Built With
 
