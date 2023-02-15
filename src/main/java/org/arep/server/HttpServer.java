@@ -14,7 +14,6 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class HttpServer {
     private static HttpServer _instance = new HttpServer();
-    private Map<String, RESTService> services = new HashMap<>();
 
     private HttpServer (){}
     public static HttpServer getInstance() {
@@ -26,7 +25,6 @@ public class HttpServer {
 
     private Map<String, HttpResponse> gets = new HashMap<>();
     private Map<String, HttpResponse> posts = new HashMap<>();
-
     public final StaticFiles staticFiles = new StaticFiles();
 
 
@@ -77,16 +75,14 @@ public class HttpServer {
 
             String requestedMovie;
             if (method.equalsIgnoreCase("GET")) {
-                try {/*
-                    if (request.startsWith("/apps/")) {
-                        outputLine = executeService(request.substring(5));
-                    } else*/ if (request.equalsIgnoreCase("/")) {
+                try {
+                    if (request.equalsIgnoreCase("/")) {
                     outputLine = staticFiles.getFile("/apps/form.html");
                     } else if (staticFiles.checkFile(request)) {
                         System.out.println("ESTÁ EN STATIC");
                         outputLine = staticFiles.getFile(request);
                     } else {
-                        outputLine = staticFiles.getFile("/404.html");
+                        outputLine = gets.get(request).getResponse();
                     }
                 }
                 catch (NullPointerException e) {
@@ -156,17 +152,6 @@ public class HttpServer {
         }
         System.out.println("GET DONE");
         return reqMovie;
-    }
-
-    /*private String executeService(String serviceName) {
-        RESTService rs = services.get(serviceName);
-        String header = rs.getHeader();
-        String body = rs.getResponse();
-        return header + body;
-    }*/
-
-    public void addService(String key, RESTService service) {
-        services.put(key, service);
     }
 
     /**

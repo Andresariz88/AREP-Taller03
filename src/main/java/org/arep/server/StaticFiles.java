@@ -9,7 +9,7 @@ public class StaticFiles {
     public static final String ROOT = "src/main/resources";
 
     public StaticFiles() {
-        location = null;
+        location = "/public";
     }
 
 
