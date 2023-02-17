@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+/**
+ * Class that sets the default path to the static files and handles the file reading
+ */
 public class StaticFiles {
     private String location;
     public static final String ROOT = "src/main/resources";
@@ -12,7 +15,11 @@ public class StaticFiles {
         location = "/public";
     }
 
-
+    /**
+     * Checks if a file is in the static files folder
+     * @param file file
+     * @return yes if the file exists, no otherwise
+     */
     public boolean checkFile(String file) {
         boolean res;
         try {
@@ -24,6 +31,11 @@ public class StaticFiles {
         return res;
     }
 
+    /**
+     * Gets a file from the static files folder
+     * @param file file
+     * @return String corresponding to the Http response message
+     */
     public String getFile(String file) {
         byte[] fileContent;
         try {

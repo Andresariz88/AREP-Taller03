@@ -63,9 +63,87 @@ Anteriormente, se tenían una interfaz de servicios **REST** y múltiples clases
 
 Estos servicios se suprimieron y ahora simplemente se tiene una clase (**StaticFiles**) que maneja las solicitudes y busca los archivos estáticos en el disco del servidor, y otra (**HttpResponse**) que configura el encabezado y el cuerpo del paquete Http que se va a enviar.
 
-Adicionalmente, se agregó la posibilidad de configurar servicios web de tipo GET y POST manualmente por medio de funciones lambda.
+Adicionalmente, se agregó la posibilidad de configurar servicios web de tipo GET y POST manualmente por medio de **funciones lambda**.
 
-## Prueba de desarrollo de aplicaciones en el servidor
+## Ejemplo de desarrollo de aplicaciones en el servidor + prueba en Windows
+
+El servidor web funciona bajo el Patrón de Diseño Singleton, así que podremos acceder a él sin necesidad de crear una instancia del mismo.
+
+    HttpServer server = HttpServer.getInstance();
+
+1. **Static Files**
+
+Para configurar el directorio estático de archivos basta con indicarle una ruta de la siguiente manera:
+
+    // La raíz es "src/main/resources", así que en este caso quedaría en "src/main/resources/public"
+    server.staticFiles.location("/public");
+
+En esta carpeta se encuentra nuestra página de Error 404 así que intentaremos acceder a ella
+
+![](./img/img2.png)
+
+2. **GET**
+
+Para configurar servicios GET podemos hacerlo de la siguiente manera:
+
+    server.get("/hello", (req, res) -> "Hello World");
+
+En este caso, creamos el recurso "/hello" que nos devolverá "Hello World" al consultarlo por medio del método GET
+
+![](./img/img3.png)
+
+También podemos cambiar el tipo de respuesta del encabezado Http
+
+    server.get("/get-json", (req, res) -> {
+        res.type("application/json");
+        return "{\"name\": \"Daniel\"}";
+    });
+
+Aquí, configuramos el tipo del recurso "/get-json" para que nos retorne un JSON
+
+![](./img/img4.png)
+
+3. **POST**
+
+Para configurar servicios POST podemos hacerlo de la siguiente manera:
+
+    server.post("/json-post", (req, res) -> {
+        res.type("application/json");
+        return "{\"name\": \"Daniel\"}";
+    });
+
+Para probarlo, creamos un archivo HTML en la carpeta public el cual tiene un script que pide por POST el recurso que acabamos de configurar
+
+    let url = "/json-post";
+    fetch (url, {method: 'POST'})
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+    });
+
+Al recibirlo, el recurso se imprimirá en la consola del navegador
+
+![](./img/img5.png)
+
+## Prueba Linux
+
+Las pruebas se realizaron en una máquina Kali Linux. El proyecto se ejecutó haciendo uso del comando:
+
+    java -cp target/classes org.arep.webapps.WebApp
+
+![](./img/img6.png)
+
+GET
+![](./img/img7.png)
+
+GET Content-type: application/json
+![](./img/img8.png)
+
+POST
+![](./img/img9.png)
+
+Static Files
+![](./img/img10.png)
 
 ## Built With
 

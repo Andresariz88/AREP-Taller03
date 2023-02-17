@@ -24,6 +24,10 @@ public class HttpResponse {
         this.body = body;
     }
 
+    /**
+     * Sets the type of the Http message according to the file extension
+     * @param file
+     */
     public void setSpecificType(String file) {
         String extension = file.split("\\.")[1];
         if (extension.equalsIgnoreCase("html")) {

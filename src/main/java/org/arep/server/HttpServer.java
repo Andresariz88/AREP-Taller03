@@ -21,7 +21,7 @@ public class HttpServer {
     }
     private static final String USER_AGENT = "Mozilla/5.0";
     private static final String GET_URL = "https://omdbapi.com/?t=%S&apikey=1d53bda9";
-    public static final ConcurrentHashMap<String, String> cache = new ConcurrentHashMap<>();
+    public static final ConcurrentHashMap<String, String> movieCache = new ConcurrentHashMap<>();
 
     private Map<String, HttpResponse> gets = new HashMap<>();
     private Map<String, HttpResponse> posts = new HashMap<>();
@@ -114,6 +114,28 @@ public class HttpServer {
     }
 
     /**
+     * Makes a resource accessible via get method
+     * @param path resource path
+     * @param route resource
+     */
+    public void get(String path, Route route) {
+        HttpResponse httpResponse = new HttpResponse();
+        httpResponse.body(route.handle("req", httpResponse));
+        gets.put(path, httpResponse);
+    }
+
+    /**
+     * Makes a resource accessible via post method
+     * @param path resource path
+     * @param route resource
+     */
+    public void post(String path, Route route) {
+        HttpResponse httpResponse = new HttpResponse();
+        httpResponse.body(route.handle("req", httpResponse));
+        posts.put(path, httpResponse);
+    }
+
+    /**
      * Method that gets the movie entered by the user, either from the cache or from the API
      * @param movie movie to look for
      * @return String corresponding to the movie information in JSON format
@@ -121,8 +143,8 @@ public class HttpServer {
      */
     public String getMovie(String movie) throws IOException {
         String reqMovie = "";
-        if (cache.containsKey(movie)) {
-            reqMovie = cache.get(movie);
+        if (movieCache.containsKey(movie)) {
+            reqMovie = movieCache.get(movie);
             return reqMovie;
         }
         String formatted = String.format(GET_URL, movie);
@@ -146,30 +168,11 @@ public class HttpServer {
             }
             in.close();
             reqMovie = response.toString();
-            cache.put(movie, reqMovie);
+            movieCache.put(movie, reqMovie);
         } else {
             System.out.println("GET request not worked");
         }
         System.out.println("GET DONE");
         return reqMovie;
-    }
-
-    /**
-     * Hace que un recurso sea accesible por medio del método get
-     * @param path ruta del recurso
-     * @param route recurso en cuestión
-     */
-    public void get(String path, Route route) {
-        HttpResponse httpResponse = new HttpResponse();
-        String responseBody = route.handle(path, httpResponse);
-        httpResponse.body(responseBody);
-        gets.put(path, httpResponse);
-    }
-
-    public void post(String path, Route route) {
-        HttpResponse httpResponse = new HttpResponse();
-        String responseBody = route.handle(path, httpResponse);
-        httpResponse.body(responseBody);
-        posts.put(path, httpResponse);
     }
 }

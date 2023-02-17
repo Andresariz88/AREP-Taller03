@@ -1,7 +1,6 @@
 package org.arep.webapps;
 
 import org.arep.server.HttpServer;
-import org.arep.server.Route;
 
 import java.io.IOException;
 
@@ -11,7 +10,7 @@ public class WebApp {
 
         server.staticFiles.location("/public");
 
-        server.get("/hello", (req, res) -> "Hello Worldffff");
+        server.get("/hello", (req, res) -> "Hello World");
         server.get("/get-json", (req, res) -> {
             res.type("application/json");
             return "{\"name\": \"Daniel\"}";
